@@ -22,6 +22,8 @@ namespace Toypad
         /// </summary>
         public ReadOnlyCollection<byte> Uid { get; }
 
+        public string UidName => string.Join(".", Uid);
+
         /// <summary>
         /// Returns a potential display name
         /// </summary>

@@ -7,20 +7,20 @@ namespace Toypad
     /// <summary>
     /// Wrapper around an original toypad
     /// </summary>
-    public sealed class HardwareToypad : Toypad
+    public class HardwareToypad : Toypad
     {
         /// <summary>
         /// Local reference to the portal
         /// </summary>
-        private readonly LegoPortal _portal;
+        public readonly LegoPortal Portal;
 
         public HardwareToypad(LegoPortal portal)
         {
-            _portal = portal ?? throw new ArgumentNullException(nameof(portal));
-            _portal.LegoTagEvent += PortalOnLegoTagEvent;
+            Portal = portal ?? throw new ArgumentNullException(nameof(portal));
+            Portal.LegoTagEvent += PortalOnLegoTagEvent;
 
             // Add already existing tags
-            foreach (var tag in _portal.PresentTags)
+            foreach (var tag in Portal.PresentTags)
             {
                 AddTag(new Tag(
                     tag.Index, 
@@ -32,7 +32,7 @@ namespace Toypad
         /// <inheritdoc />
         protected override void OnDispose()
         {
-            _portal.Dispose();
+            Portal.Dispose();
         }
 
         /// <inheritdoc />
@@ -43,23 +43,23 @@ namespace Toypad
             if (pad == Pad.All)
             {
                 // Special handling for all pads
-                _portal.SetColor(LegoDimensions.Portal.Pad.All, FromExternalColor(color));
+                Portal.SetColor(LegoDimensions.Portal.Pad.All, FromExternalColor(color));
             }
             else
             {
                 if (pad.HasFlag(Pad.Left))
                 {
-                    _portal.SetColor(LegoDimensions.Portal.Pad.Left, FromExternalColor(color));
+                    Portal.SetColor(LegoDimensions.Portal.Pad.Left, FromExternalColor(color));
                 }
 
                 if (pad.HasFlag(Pad.Right))
                 {
-                    _portal.SetColor(LegoDimensions.Portal.Pad.Right, FromExternalColor(color));
+                    Portal.SetColor(LegoDimensions.Portal.Pad.Right, FromExternalColor(color));
                 }
 
                 if (pad.HasFlag(Pad.Center))
                 {
-                    _portal.SetColor(LegoDimensions.Portal.Pad.Center, FromExternalColor(color));
+                    Portal.SetColor(LegoDimensions.Portal.Pad.Center, FromExternalColor(color));
                 }
             }
         }
@@ -72,23 +72,23 @@ namespace Toypad
             if (pad == Pad.All)
             {
                 // Special handling for all pads
-                _portal.Flash(LegoDimensions.Portal.Pad.All, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
+                Portal.Flash(LegoDimensions.Portal.Pad.All, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
             }
             else
             {
                 if (pad.HasFlag(Pad.Left))
                 {
-                    _portal.Flash(LegoDimensions.Portal.Pad.Left, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
+                    Portal.Flash(LegoDimensions.Portal.Pad.Left, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
                 }
 
                 if (pad.HasFlag(Pad.Right))
                 {
-                    _portal.Flash(LegoDimensions.Portal.Pad.Right, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
+                    Portal.Flash(LegoDimensions.Portal.Pad.Right, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
                 }
 
                 if (pad.HasFlag(Pad.Center))
                 {
-                    _portal.Flash(LegoDimensions.Portal.Pad.Center, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
+                    Portal.Flash(LegoDimensions.Portal.Pad.Center, new FlashPad(onPhase, offPhase, cycles, FromExternalColor(color)));
                 }
             }
         }
@@ -101,25 +101,26 @@ namespace Toypad
             if (pad == Pad.All)
             {
                 // Special handling for all pads
-                _portal.Fade(LegoDimensions.Portal.Pad.All, new FadePad(time, cycles, FromExternalColor(color)));
+                Portal.Fade(LegoDimensions.Portal.Pad.All, new FadePad(time, cycles, FromExternalColor(color)));
             }
             else
             {
                 if (pad.HasFlag(Pad.Left))
                 {
-                    _portal.Fade(LegoDimensions.Portal.Pad.Left, new FadePad(time, cycles, FromExternalColor(color)));
+                    Portal.Fade(LegoDimensions.Portal.Pad.Left, new FadePad(time, cycles, FromExternalColor(color)));
                 }
 
                 if (pad.HasFlag(Pad.Right))
                 {
-                    _portal.Fade(LegoDimensions.Portal.Pad.Right, new FadePad(time, cycles, FromExternalColor(color)));
+                    Portal.Fade(LegoDimensions.Portal.Pad.Right, new FadePad(time, cycles, FromExternalColor(color)));
                 }
 
                 if (pad.HasFlag(Pad.Center))
                 {
-                    _portal.Fade(LegoDimensions.Portal.Pad.Center, new FadePad(time, cycles, FromExternalColor(color)));
+                    Portal.Fade(LegoDimensions.Portal.Pad.Center, new FadePad(time, cycles, FromExternalColor(color)));
                 }
             }
+            //Thread.Sleep(time * 10);
         }
 
         /// <summary>
