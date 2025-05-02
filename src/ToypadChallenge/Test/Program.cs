@@ -1,24 +1,61 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using LegoDimensions;
-using LegoDimensions.Portal;
+﻿using LegoDimensions;
+using LibUsbDotNet.LibUsb;
 using Toypad;
-using Color = System.Drawing.Color;
-using Pad = Toypad.Pad;
 
-Console.WriteLine("START");
-try
-{
-    var toypad = Toypad.Toypad.CreateToypad();
-    var toyPadManager = new ToyPadManager((HardwareToypad)toypad);
-    toyPadManager.Init();
+namespace Test;
 
-    Console.WriteLine("Waiting for tag...");
-    Console.ReadLine();
-    Console.WriteLine("END");
-}
-catch (Exception e)
+public static class Program
 {
-    Console.WriteLine(e);
-    throw;
+    static ToyPadManager? _toyPadManager;
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("START");
+        try
+        {
+            Init();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _toyPadManager?.Dispose();
+            
+            try
+            {
+                Init();
+            }
+            catch (Exception ei)
+            {
+                Console.WriteLine(ei);
+                _toyPadManager?.Dispose();
+                Init();
+            }
+        }
+    }
+
+    private static void Init()
+    {
+        Console.Write("Connecting portal...");
+        IUsbDevice? portal = null;
+        while (portal == null)
+        {
+            portal = LegoPortal.GetPortals().FirstOrDefault();
+            if (portal == null)
+            {
+                Console.Write(".");
+                Thread.Sleep(1000);   
+            }
+        }
+        Console.WriteLine();
+
+        Console.WriteLine("Portal connected.");
+        
+        var toyPad = new HardwareToypad(new LegoPortal(portal));
+            
+        _toyPadManager = new ToyPadManager(toyPad);
+        _toyPadManager.Init();
+        
+        Console.WriteLine("Waiting for tag...");
+        Console.ReadLine();
+        Console.WriteLine("END");
+    }
 }

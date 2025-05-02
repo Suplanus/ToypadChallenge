@@ -1,7 +1,7 @@
 using System.Drawing;
 using Toypad;
 
-public class ToyPadManager
+public class ToyPadManager : IDisposable
 {
     private readonly HardwareToypad _toyPad;
     private bool _isLoaded = false;
@@ -62,5 +62,10 @@ public class ToyPadManager
         }
         _isLoaded = true;
         Console.WriteLine("Loaded");
+    }
+
+    public void Dispose()
+    {
+        _toyPad.Dispose();
     }
 }

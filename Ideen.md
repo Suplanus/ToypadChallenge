@@ -19,3 +19,11 @@ Mitte: Gelb
 Links: Lila
 Rechts: Blau
 Gleichstand: Grün 
+
+
+
+# MusicBox
+
+## Youtube Playlist abspielen
+
+An der UID hängt eine Youtube Playlist.
