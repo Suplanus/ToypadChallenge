@@ -7,12 +7,12 @@ namespace Test;
 public static class Program
 {
     static ToyPadManager? _toyPadManager;
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Console.WriteLine("START");
         try
         {
-            Init();
+            await Init();
         }
         catch (Exception e)
         {
@@ -21,18 +21,19 @@ public static class Program
             
             try
             {
-                Init();
+                await Init();
             }
             catch (Exception ei)
             {
                 Console.WriteLine(ei);
                 _toyPadManager?.Dispose();
-                Init();
+                await Init();
             }
         }
+        Console.WriteLine("END");
     }
 
-    private static void Init()
+    private static async Task Init()
     {
         Console.Write("Connecting portal...");
         IUsbDevice? portal = null;
@@ -52,10 +53,9 @@ public static class Program
         var toyPad = new HardwareToypad(new LegoPortal(portal));
             
         _toyPadManager = new ToyPadManager(toyPad);
-        _toyPadManager.Init();
+        await _toyPadManager.Init();
         
         Console.WriteLine("Waiting for tag...");
         Console.ReadLine();
-        Console.WriteLine("END");
     }
 }

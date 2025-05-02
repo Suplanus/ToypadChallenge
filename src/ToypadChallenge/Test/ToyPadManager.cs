@@ -1,4 +1,5 @@
 using System.Drawing;
+using LibUsbDotNet.Main;
 using Toypad;
 
 public class ToyPadManager : IDisposable
@@ -40,7 +41,7 @@ public class ToyPadManager : IDisposable
         Console.WriteLine("Tag remvoed: " + e.UidName);
     }
 
-    public void Init()
+    public async Task Init()
     {
         Console.WriteLine("Loading...");
         for (int i = 0; i < 3; i++)
@@ -62,6 +63,22 @@ public class ToyPadManager : IDisposable
         }
         _isLoaded = true;
         Console.WriteLine("Loaded");
+
+        // Check connection
+        await CheckConnection();
+    }
+
+    private async Task CheckConnection()
+    {
+        while (true)
+        {
+            if (!_isLoaded)
+            {
+                continue;
+            }
+            await Task.Delay(1000);
+            _toyPad.Portal.UsbDevice.ControlTransfer(default); // Exception thrown if disconnected
+        }
     }
 
     public void Dispose()
